@@ -51,7 +51,6 @@ export class RegisterDto {
   @ApiProperty()
   dateOfBirth: Date;
 
-  @IsBase64()
   @IsOptional()
   @ApiProperty({ description: "base64 encoded image" })
   profilePicture: string;

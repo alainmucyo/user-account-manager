@@ -46,7 +46,7 @@ export class UserService {
       await this.queue.add(
         {
           entity: USER_ENTITY,
-          image: user.profilePicture,
+          image: profilePicture,
           columnName: "profilePicture",
           id: savedUser.id,
         },

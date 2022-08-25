@@ -8,6 +8,7 @@ export class CloudinaryService {
     return new Promise((resolve, reject) => {
       v2.uploader.upload(file, { folder: "accounting" }, (err, result) => {
         if (err) {
+          console.log(err);
           reject(err);
         } else {
           resolve(result);
