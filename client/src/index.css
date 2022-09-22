@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+table{
+    width: 100%;
+    table-layout: auto !important;
+}
+table th{
+    font-size: 16px !important;
+    color: #2D3748 !important;
+    font-weight: 600 !important;
+    text-align: start !important;
+}
+table tr{
+    @apply duration-200;
+
+}
+table td{
+    border: none!important;
+    font-size: 14px !important;
+}
+.table-title{
+    color: #2D3748 !important;
+}
+.table-header{
+    padding-left:0 !important;
+}
+table tr:nth-child(even) {
+    @apply bg-gray-100;
+}
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
