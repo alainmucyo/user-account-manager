@@ -13,9 +13,15 @@
         </div>
         <div class="mb-4 ">
           <div class="flex justify-between items-center">
-            <router-link to="/register" class="text-blue-600 hover:text-blue-500 duration-100">Create Account Here!</router-link>
+            <router-link to="/register" class="text-blue-600 hover:text-blue-500 duration-100">Create Account Here!
+            </router-link>
             <submit-button text="Login" :loading="loading" loading_text="Logging in..."/>
           </div>
+          <div class="flex justify-end mt-4">
+            <router-link to="/reset-password" class="text-blue-600 hover:text-blue-500 duration-100">Reset password
+            </router-link>
+          </div>
+
         </div>
       </form>
 
@@ -45,18 +51,18 @@ export default {
   methods: {
     async submit() {
       try {
+
         this.loading = true;
-        const {data} = await axios.post("/users/login", this.form)
-        const token = data.access_token;
-        localStorage.setItem("token", token);
-        await this.$store.dispatch("setToken", token)
-        await this.$store.dispatch("setAuth", true)
-        this.$router.push("/")
+        const {data} = await axios.post("/users/request-login-otp", this.form)
+        console.log(data)
+        this.$toast.success(data.message, {position: "top-right"})
+        this.$router.push("/login-otp")
       } catch (e) {
         this.failed = true;
-        if (e.response.status === 401)
+        if (e.response.status === 400) {
           this.errorMsg = "Wrong username or password."
-        else
+          this.$toast.error(e.response.data.message, {position: "top-right",duration:0})
+        } else
           this.errorMsg = "Something went wrong."
 
       } finally {

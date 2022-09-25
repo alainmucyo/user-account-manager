@@ -24,6 +24,7 @@ export class UserDetailController {
   @UseInterceptors(ClassSerializerInterceptor)
   save(@Body() userDetailDto: UserDetailsDto, @Request() req) {
     const user: User = req.user;
+
     return this.userDetailService.save(userDetailDto, user);
   }
 }

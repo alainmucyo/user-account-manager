@@ -61,6 +61,12 @@ export class UserService {
   async findUserByUsername(username: string) {
     return User.findOne({ where: { username } });
   }
+  async findUserByEmail(email: string) {
+    return User.findOne({ where: { email } });
+  }
+  async findUserByPhone(phoneNumber: string) {
+    return User.findOne({ where: { phoneNumber } });
+  }
   findById(id: string) {
     return User.findOne({ where: { id } });
   }

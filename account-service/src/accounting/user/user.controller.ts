@@ -86,6 +86,20 @@ export class UserController {
     if (foundUser != null)
       throw new BadRequestException("Username have been already used");
 
+    const foundUserPhone = await this.userService.findUserByPhone(
+      registerDto.phoneNumber,
+    );
+
+    if (foundUserPhone != null)
+      throw new BadRequestException("Phone number have been already used");
+
+    const foundUserEmail = await this.userService.findUserByEmail(
+      registerDto.email,
+    );
+
+    if (foundUserEmail != null)
+      throw new BadRequestException("Email have been already used");
+
     const user = new User();
     user.firstName = registerDto.firstName;
     user.lastName = registerDto.lastName;
@@ -113,6 +127,8 @@ export class UserController {
     const otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
       specialChars: false,
+      digits: true,
+      lowerCaseAlphabets: false,
     });
     console.log("Generated OTP: " + otp);
     this.redisHelper.set(`login-opt-${otp}`, user);
@@ -126,7 +142,11 @@ export class UserController {
       smsDto,
       process.env.SEND_SMS_REQUEST_TOPIC,
     );
-    return { message: "We have sent you an OTP to your phone number" };
+    return {
+      message:
+        "We have sent you an OTP to your phone number that ends with " +
+        user.phoneNumber.slice(-3),
+    };
   }
 
   @Post("/confirm-login-otp")
@@ -145,6 +165,8 @@ export class UserController {
     const otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
       specialChars: false,
+      digits: true,
+      lowerCaseAlphabets: false,
     });
     console.log("Generated OTP: " + otp);
     this.redisHelper.set(`password-reset-opt-${otp}`, user);
@@ -158,7 +180,11 @@ export class UserController {
       smsDto,
       process.env.SEND_SMS_REQUEST_TOPIC,
     );
-    return { message: "We have sent you an OTP to your phone number" };
+    return {
+      message:
+        "We have sent you an OTP to your phone number that ends with " +
+        user.phoneNumber.slice(-3),
+    };
   }
 
   @Post("/confirm-password-reset-otp")

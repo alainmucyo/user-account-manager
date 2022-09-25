@@ -5,7 +5,11 @@ import store from './store'
 import './index.css'
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:5000/api/"
+axios.defaults.baseURL = "http://localhost:3000/api/v1/"
+import VueToast from 'vue-toast-notification';
+// Import one of the available themes
+//import 'vue-toast-notification/dist/theme-default.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 const token = localStorage.getItem("token");
 if (token && token.trim() !== "") {
@@ -21,6 +25,7 @@ if (store.getters.isAuth && store.getters.token != '') {
 }
 
 Vue.config.productionTip = false
+Vue.use(VueToast);
 
 new Vue({
     router,

@@ -6,7 +6,6 @@
         :value="value"
         @input="$emit('input', $event.target.value)"
         required
-        :placeholder="label"
         class="text-sm sm:text-base relative bg-white w-full border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2.5 px-4">
   </div>
 </template>

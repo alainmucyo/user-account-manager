@@ -1,16 +1,36 @@
 <template>
   <div class="flex justify-center px-2 py-2 items-center h-screen">
-    <div class="lg:w-2/5  w-full bg-white px-6 py-6 rounded shadow">
+    <div class="lg:w-3/5  w-full bg-white px-6 py-6 rounded shadow">
       <h1 class="text-gray-700 text-2xl tracking-wide">Welcome,</h1>
-      <h3 class="text-gray-800 text-lg tracking-wide">Please provide username and password to register!</h3>
+      <h3 class="text-gray-800 text-lg tracking-wide">Please provide your details to register!</h3>
       <form class="mt-4" @submit.prevent="submit">
-        <div class="mb-4 ">
-          <form-input label="Names" type="text" v-model="form.name"/>
+        <div class="mb-4 flex">
+          <form-input label="First Name" type="text" v-model="form.firstName"/>
+          <div class="ml-2"></div>
+          <form-input label="Last Name" type="text" v-model="form.lastName"/>
         </div>
-        <div class="mb-4 ">
+        <div class="mb-4 flex">
           <form-input label="Username" type="text" v-model="form.username"/>
+          <div class="ml-2"></div>
+          <form-input label="Email" type="text" v-model="form.email"/>
         </div>
-
+        <div class="mb-4 flex">
+          <form-input label="Phone number" type="text" v-model="form.phoneNumber"/>
+          <div class="ml-2"></div>
+          <form-input label="Date of birth" type="date" v-model="form.dateOfBirth"/>
+        </div>
+        <div class="mb-4 flex">
+          <form-select label="Gender" :options="['Male','Female']" v-model="form.gender"/>
+          <div class="ml-2"></div>
+          <form-select label="Marital status" :options="['Married', 'Single', 'Divorced', 'Widowed']"
+                       v-model="form.maritalStatus"/>
+          <div class="ml-2"></div>
+          <form-select label="Nationality" :options="['Rwanda', 'Burundi', 'DRC', 'Uganda']"
+                       v-model="form.nationality"/>
+        </div>
+        <div class="mb-4 ">
+          <image-handler label="Upload your image(optional)" v-model="form.profilePicture"/>
+        </div>
         <div class="mb-4 ">
           <form-input label="Password" type="password" v-model="form.password"/>
         </div>
@@ -34,17 +54,27 @@
 import FormInput from "../components/shared/form-input";
 import SubmitButton from "../components/shared/submit-button";
 import axios from "axios";
+import FormSelect from "@/components/shared/form-select";
+import ImageHandler from "@/components/shared/image-handler";
 
 export default {
   name: 'Register',
-  components: {SubmitButton, FormInput},
+  components: {ImageHandler, FormSelect, SubmitButton, FormInput},
   data() {
     return {
       form: {
-        name: '',
+        firstName: '',
+        lastName: '',
+        email: "",
+        gender: "male",
+        maritalStatus: "single",
+        nationality: "rwanda",
+        phoneNumber: "250",
+        dateOfBirth: "",
         username: '',
         password: '',
         confirm_password: '',
+        profilePicture: null,
       },
       loading: false,
       failed: false,
@@ -62,16 +92,14 @@ export default {
       try {
         this.loading = true;
         const {data} = await axios.post("/users/register", this.form)
-        const token = data.access_token;
-        localStorage.setItem("token", token);
-        await this.$store.dispatch("setToken", token)
-        await this.$store.dispatch("setAuth", true)
-        this.$router.push("/")
+        console.log(data);
+        this.$router.push("/login")
       } catch (e) {
         this.failed = true;
-        if (e.response.status === 400)
-          this.errorMsg = e.response.data.message[0]
-        else
+        if (e.response.status === 400) {
+          const msg = e.response.data.message
+          this.errorMsg = typeof msg == "string" ? msg : msg[0]
+        } else
           this.errorMsg = "Something went wrong."
 
       } finally {
