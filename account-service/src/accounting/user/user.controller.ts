@@ -207,6 +207,7 @@ export class UserController {
   @Get("/check")
   @UseInterceptors(ClassSerializerInterceptor)
   checkLogin(@Request() req) {
-    return req.user;
+    const user = req.user;
+    return User.findOne({ where: { id: user.id }, relations: ["detail"] });
   }
 }

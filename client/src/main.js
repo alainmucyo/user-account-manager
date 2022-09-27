@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import './index.css'
 import axios from "axios";
+import VModal from 'vue-js-modal'
 
 axios.defaults.baseURL = "http://localhost:3000/api/v1/"
 import VueToast from 'vue-toast-notification';
@@ -25,6 +26,7 @@ if (store.getters.isAuth && store.getters.token != '') {
 }
 
 Vue.config.productionTip = false
+Vue.use(VModal)
 Vue.use(VueToast);
 
 new Vue({

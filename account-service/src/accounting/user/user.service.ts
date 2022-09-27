@@ -7,6 +7,7 @@ import { USER_ENTITY } from "../../constants/entities";
 import { AccountStateModel } from "./model/account-state.model";
 import { SendSmsDto } from "./dto/send-sms.dto";
 import { EventHelper } from "../../helpers/events.helper";
+import {Roles} from "./model/role.model";
 
 @Injectable()
 export class UserService {
@@ -17,6 +18,7 @@ export class UserService {
   async findAll() {
     return await User.find({
       relations: ["detail"],
+      where: { role: Roles.User },
       order: { created_at: "DESC" },
     });
   }

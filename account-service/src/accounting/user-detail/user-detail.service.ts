@@ -46,6 +46,6 @@ export class UserDetailService {
       },
     );
     user.state = AccountStateModel.PendingVerification;
-   await user.save();
+    await user.save();
   }
 }

@@ -9,13 +9,35 @@ export class SmsProcessor {
   async sendSMS(job: Job) {
     console.log("Sending SMS");
     const smsData: SmsDto = job.data;
-    const headers = {
+
+    /*   const headers = {
       "Content-Type": "application/json",
       cmd: "SEND_SMS",
       domain: process.env.SMS_DOMAIN,
-    };
+    };*/
     try {
+      const bodyData = {
+        notification_type: "sms",
+        notification_category: "opt",
+        metadata: {
+          source: smsData.senderID,
+          destinations: [smsData.phoneNumber],
+          subject: "SMS",
+          message: smsData.message,
+        },
+      };
       const response = await axios.post(
+        process.env.NOTIFICATION_API_URL,
+        bodyData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            apiKey: process.env.NOTIFICATION_API_KEY,
+          },
+        },
+      );
+      // console.log(response);
+      /*   const response = await axios.post(
         process.env.SMS_URL,
         {
           src: smsData.senderID,
@@ -26,6 +48,7 @@ export class SmsProcessor {
         },
         { headers },
       );
+      console.log(response);*/
       console.log(response);
     } catch (e) {
       console.log(e);

@@ -15,6 +15,7 @@
     "filepond-plugin-image-preview": "^4.6.11",
     "vue": "^2.6.11",
     "vue-filepond": "^6.0.3",
+    "vue-js-modal": "^2.0.1",
     "vue-materialize-datatable": "^1.0.4",
     "vue-router": "^3.2.0",
     "vue-toast-notification": "^0.6.3",

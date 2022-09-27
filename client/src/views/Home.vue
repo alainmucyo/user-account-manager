@@ -5,7 +5,11 @@
         <div>
           <h1 class="text-xl text-gray-600">Hello <b>{{ user.firstName }}</b>!
           </h1>
-          <b class="text-gray-600 text-sm">Account state: </b> <span v-if="user.state" :class="`text-sm ${state.color} ${state.background} rounded px-3 py-1 font-semibold`">{{ state.state.toUpperCase() }}</span>
+          <b class="text-gray-600 text-sm">Account state: </b>
+          <span v-if="user.state"
+                :class="`text-sm ${state.color} ${state.background} rounded px-3 py-1 font-semibold`">{{
+              state.state.toUpperCase()
+            }}</span>
         </div>
 
         <div class="relative" v-if="user.profilePicture">
@@ -16,8 +20,10 @@
         </div>
         <a href="#" @click.prevent="logout" class="text-red-600">Logout</a>
       </div>
-      <hr class="my-6 " v-if="user && state.state=='Unverified'">
-      <user-details-form v-if="user && state.state=='Unverified'" @saved="loadUser"/>
+      <hr class="my-6 ">
+      <user-details-form v-if="user && state.state=='Unverified' && user.role==='user'" @saved="loadUser"/>
+      <user v-if="user && state.state!='Unverified' && user.role==='user'" :user="user"/>
+      <users-list v-if="user &&  user.role==='admin'"/>
     </div>
   </div>
 </template>
@@ -25,10 +31,13 @@
 <script>
 import axios from "axios";
 import UserDetailsForm from "@/components/user-details-form";
+import User from "@/components/user";
+import UsersList from "@/components/users-list";
+// import {GlobalEventEmitter} from "@/utils/event-bus";
 
 export default {
   name: 'Home',
-  components: {UserDetailsForm},
+  components: {UsersList, User, UserDetailsForm},
   data() {
     return {
       transactions: [],
@@ -37,8 +46,15 @@ export default {
   },
   methods: {
     async loadUser() {
-      const {data} = await axios.get("/users/check");
-      this.user = data;
+      try {
+        const {data} = await axios.get("/users/check");
+        this.user = data;
+      } catch (e) {
+        if (e.response.status === 401) {
+          this.logout()
+        }
+      }
+
     },
 
     logout() {
@@ -50,7 +66,7 @@ export default {
   },
   computed: {
     state() {
-
+      if (!this.user) return {state: "Loading...", background: "", color: ""}
       if (this.user.state.toLowerCase().includes("pending")) {
         return {state: "Pending", background: "bg-blue-200", color: "text-blue-800"}
       }
@@ -62,6 +78,7 @@ export default {
   },
   created() {
     this.loadUser();
+
   }
 }
 </script>
