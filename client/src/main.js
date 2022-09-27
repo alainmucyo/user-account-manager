@@ -6,7 +6,7 @@ import './index.css'
 import axios from "axios";
 import VModal from 'vue-js-modal'
 
-axios.defaults.baseURL = "http://localhost:3000/api/v1/"
+axios.defaults.baseURL = "https://accounts-manager.fly.dev/api/v1/"
 import VueToast from 'vue-toast-notification';
 // Import one of the available themes
 //import 'vue-toast-notification/dist/theme-default.css';
